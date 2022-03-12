@@ -21,6 +21,14 @@ def train_test_split(df,gpu=False):
         return cudf_train_test_split(df)
     else:
         return pd_train_test_split(df)
+    
+def x_y_group(data,features,target,only_x=False,verbose=False):
+    x = data[features]
+    if only_x: return x,None,None
+    y = data[target]
+    group = data.groupby('customer_id').size().to_frame('size')['size'].to_numpy()
+    if verbose: print('shape (x,y,group): ',x.shape,y.shape,group.shape)
+    return x,y,group
 
 def print_memory_usage(obj):
     print('Used '+str(obj.memory_usage(deep=True).sum() / 1024 / 1024 / 1024)+" Gb")
