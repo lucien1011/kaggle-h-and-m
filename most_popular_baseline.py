@@ -37,7 +37,7 @@ def train_test_split(df):
     return train_df,valid_df,valid_gt_df
 
 def predict_topk_popular_articles(df,k=12):
-    topk = df.loc[df.t_dat < pd.to_datetime('2020-09-16')]['article_id'].value_counts()[:k].index.tolist()
+    topk = df.loc[(df.t_dat < pd.to_datetime('2020-09-16')) & (df.t_dat > pd.to_datetime('2020-09-09'))]['article_id'].value_counts()[:k].index.tolist()
     return topk
 
 def construct_true_df(df):

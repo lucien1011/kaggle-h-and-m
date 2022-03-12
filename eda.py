@@ -6,7 +6,7 @@ from metric import calculate_score
 
 conf = dict(
         trans_csv_path='storage/transactions_train.csv',
-        item_pairs_path='storage/item_pairs.npy'
+        item_pairs_path='storage/pairs_cudf.npy'
         )
 
 def train_test_split(df):
@@ -78,7 +78,10 @@ def run(conf):
     trn_df,val_df,val_gt_df = train_test_split(trans)
     
     print('Construct item pairs')
-    item_pairs = construct_item_pairs(trn_df) 
+    if conf['item_pairs_path'] is not None:
+        item_pairs = np.load(conf['item_pairs_path'],allow_pickle=True).item()
+    else:
+        item_pairs = construct_item_pairs(trn_df) 
     
     print('Local cross validation')
     cv_df = construct_true_df(val_df)
